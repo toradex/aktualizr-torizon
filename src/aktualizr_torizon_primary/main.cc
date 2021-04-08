@@ -13,6 +13,7 @@
 #include "utilities/aktualizr_version.h"
 #include "utilities/sig_handler.h"
 #include "utilities/utils.h"
+#include "update_events.h"
 
 namespace bpo = boost::program_options;
 
@@ -87,20 +88,6 @@ bpo::variables_map parseOptions(int argc, char **argv) {
   return vm;
 }
 
-void processEvent(const std::shared_ptr<event::BaseEvent> &event) {
-  if (event->isTypeOf<event::DownloadProgressReport>() || event->variant == "UpdateCheckComplete") {
-    // Do nothing; libaktualizr already logs it.
-  } else if (event->variant == "AllDownloadsComplete") {
-    const auto *downloads_complete = dynamic_cast<event::AllDownloadsComplete *>(event.get());
-    LOG_INFO << "got " << event->variant << " event with status: " << downloads_complete->result.status;
-  } else if (event->variant == "AllInstallsComplete") {
-    const auto *installs_complete = dynamic_cast<event::AllInstallsComplete *>(event.get());
-    LOG_INFO << "got " << event->variant << " event with status: " << installs_complete->result.dev_report.result_code;
-  } else {
-    LOG_INFO << "got " << event->variant << " event";
-  }
-}
-
 int main(int argc, char *argv[]) {
   logger_init();
   logger_set_threshold(boost::log::trivial::info);
@@ -120,7 +107,8 @@ int main(int argc, char *argv[]) {
     LOG_DEBUG << "Current directory: " << boost::filesystem::current_path().string();
 
     Aktualizr aktualizr(config);
-    std::function<void(std::shared_ptr<event::BaseEvent> event)> f_cb = processEvent;
+    UpdateEvents *events = events->getInstance(&aktualizr);
+    std::function<void(std::shared_ptr<event::BaseEvent> event)> f_cb = events->processEvent;
     boost::signals2::scoped_connection conn;
 
     conn = aktualizr.SetSignalHandler(f_cb);
