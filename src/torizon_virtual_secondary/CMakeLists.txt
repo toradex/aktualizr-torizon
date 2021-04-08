@@ -8,7 +8,7 @@ add_library(${TARGET} STATIC
   ${SOURCES}
 )
 
-target_include_directories(${TARGET} PUBLIC ${PROJECT_SOURCE_DIR}/src/torizon_virtual_secondary)
+target_include_directories(${TARGET} PUBLIC ${PROJECT_SOURCE_DIR}/src/torizon_virtual_secondary ${PROJECT_SOURCE_DIR}/src/aktualizr_torizon_primary)
 
 add_aktualizr_test(NAME torizon_virtual_secondary SOURCES virtual_secondary_test.cc PROJECT_WORKING_DIRECTORY LIBRARIES uptane_generator_lib)
 target_link_libraries(t_torizon_virtual_secondary torizon_virtual_secondary)

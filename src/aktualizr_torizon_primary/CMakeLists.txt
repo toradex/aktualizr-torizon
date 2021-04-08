@@ -1,5 +1,5 @@
-set(SOURCES main.cc secondary_config.cc secondary.cc update_events.cc update_lock.cc)
-set(HEADERS secondary_config.h secondary.h update_events.h update_lock.h)
+set(SOURCES main.cc secondary_config.cc secondary.cc update_events.cc update_lock.cc command_runner.cc compose_manager.cc)
+set(HEADERS secondary_config.h secondary.h update_events.h update_lock.h command_runner.h compose_manager.h)
 
 add_executable(aktualizr-torizon ${SOURCES})
 target_link_libraries(aktualizr-torizon aktualizr_lib torizon_virtual_secondary aktualizr-posix)
