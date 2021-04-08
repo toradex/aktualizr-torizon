@@ -1,0 +1,3 @@
+[submodule "aktualizr"]
+	path = aktualizr
+	url = https://github.com/advancedtelematic/aktualizr.git
