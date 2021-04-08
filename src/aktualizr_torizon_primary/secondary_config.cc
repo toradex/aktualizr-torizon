@@ -117,4 +117,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
   }
 }
 
+void JsonConfigParser::createDockerComposeSecondariesCfg(Configs& configs, const Json::Value& json_docker_compose_sec_cfg) {
+  for (const auto& json_config : json_docker_compose_sec_cfg) {
+    auto docker_compose_config = std::make_shared<DockerComposeSecondaryConfig>(json_config);
+    configs.push_back(docker_compose_config);
+  }
+}
+
 }  // namespace Primary

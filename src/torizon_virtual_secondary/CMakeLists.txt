@@ -1,6 +1,6 @@
-set(SOURCES managedsecondary.cc virtualsecondary.cc)
+set(SOURCES managedsecondary.cc virtualsecondary.cc dockercomposesecondary.cc)
 
-set(HEADERS managedsecondary.h virtualsecondary.h)
+set(HEADERS managedsecondary.h virtualsecondary.h dockercomposesecondary.h)
 
 set(TARGET torizon_virtual_secondary)
 
