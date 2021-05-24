@@ -14,6 +14,7 @@
 #include "utilities/sig_handler.h"
 #include "utilities/utils.h"
 #include "update_events.h"
+#include "device_data_proxy.h"
 
 namespace bpo = boost::program_options;
 
@@ -46,7 +47,10 @@ bpo::variables_map parseOptions(int argc, char **argv) {
       ("primary-ecu-hardware-id", bpo::value<std::string>(), "hardware ID of Primary ECU")
       ("secondary-config-file", bpo::value<boost::filesystem::path>(), "Secondary ECUs configuration file")
       ("campaign-id", bpo::value<std::string>(), "ID of the campaign to act on")
-      ("hwinfo-file", bpo::value<boost::filesystem::path>(), "custom hardware information JSON file");
+      ("hwinfo-file", bpo::value<boost::filesystem::path>(), "custom hardware information JSON file")
+      ("enable-data-proxy", "enable proxy to send device data to Torizon OTA via SendDeviceData()")
+      ("data-proxy-port", bpo::value<int>(), "TCP port to be used by the proxy (defaults to 8850)");
+
   // clang-format on
 
   // consider the first positional argument as the aktualizr run mode
@@ -125,8 +129,35 @@ int main(int argc, char *argv[]) {
 
     aktualizr.Initialize();
 
+    // configure device data proxy
+    DeviceDataProxy proxy;
+    if (commandline_map.count("enable-data-proxy") != 0) {
+
+      // proxy conflicts with hwinfo-file
+      if (commandline_map.count("hwinfo-file") != 0) {
+        LOG_ERROR << "Parameters --enable-data-proxy and --hwinfo-file conflict with each other. "
+                  << "Please enable only one of them!";
+        return EXIT_FAILURE;
+      }
+
+      // setup proxy TCP port
+      uint16_t port = 0;
+      if (commandline_map.count("data-proxy-port") != 0)
+        port = commandline_map["data-proxy-port"].as<int>();
+
+      // start proxy
+      try {
+        proxy.Initialize(port);
+        proxy.Start(aktualizr);
+      } catch (const std::exception &ex) {
+        proxy.Stop(aktualizr, true);
+        LOG_ERROR << "PROXY: error: " << ex.what();
+      }
+    }
+
     // handle unix signals
-    SigHandler::get().start([&aktualizr]() {
+    SigHandler::get().start([&aktualizr,&proxy]() {
+      proxy.Stop(aktualizr, false);
       aktualizr.Abort();
       aktualizr.Shutdown();
     });
