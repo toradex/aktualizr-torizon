@@ -33,3 +33,6 @@
 
 # Build directories
 build*/
+
+# Test directories
+test*/
