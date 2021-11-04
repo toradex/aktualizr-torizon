@@ -8,7 +8,7 @@ To build the application locally:
 ```bash
 # First install any needed build dependencies
 sudo apt install asn1c build-essential cmake curl libarchive-dev libboost-dev libboost-filesystem-dev libboost-log-dev libboost-program-options-dev libcurl4-openssl-dev libpthread-stubs0-dev libsodium-dev libsqlite3-dev libssl-dev python3
-# Apply any patches in "aktualizr-patches"
+# And then build the project
 mkdir build && cd build
 cmake ..
 make
