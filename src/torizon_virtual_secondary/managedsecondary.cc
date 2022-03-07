@@ -129,8 +129,17 @@ data::InstallationResult ManagedSecondary::putMetadataOffUpd(const Uptane::Targe
    *
    * ATM we are providing the secondary with the same fetcher used by the primary
    * instead of creating an intermediate fetcher that keeps the metadata from the
-   * primary in memory. One extra complication of trying to do so with the offline
-   * case is that the fetcher is called with a variable role in updateMetaOffUpd().
+   * primary in memory.
+   *
+   * Some complications of trying to do so with the offline case:
+   *
+   * - The fetcher is called with a variable role in updateMetaOffUpd().
+   * - DirectorRepository::updateMetaOffUpd() directly access the takeout image so a
+   *   rigged USB flash drive could present different data to the primary and to the
+   *   secondary.
+   *     - Solving this might require extending the fetcher interface class to cover
+   *       code handling PURE-2 step 4: result may need to be kept in NVM to work as
+   *       a snapshot of the metadata as seen by the primary.
    *
    * Are we losing some security by accessing directly the offline fetcher here?
    */
