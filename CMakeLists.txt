@@ -10,5 +10,7 @@ add_definitions(-DBOOST_LOG_DYN_LINK)
 
 set(AKTUALIZR_VERSION "2020.8")
 
+# TODO: Fully review this file based on the one in aktualizr/
+# TODO: Enable testing (call enable_testing())
 add_subdirectory("aktualizr")
 add_subdirectory("src")

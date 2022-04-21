@@ -155,6 +155,14 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    // Check if Offline Updates are enabled
+    // TODO: [OFFUPD] Review these logs post-MVP
+    if (config.uptane.enable_offline_updates) {
+      LOG_INFO << "Offline Updates are enabled";
+    } else {
+      LOG_INFO << "Offline Updates are disabled";
+    }
+
     // handle unix signals
     SigHandler::get().start([&aktualizr,&proxy]() {
       proxy.Stop(aktualizr, false);
