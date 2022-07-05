@@ -129,4 +129,11 @@ void JsonConfigParser::createDockerComposeSecondariesCfg(Configs& configs, const
   }
 }
 
+void JsonConfigParser::createTorizonGenericSecondariesCfg(Configs& configs, const Json::Value& json_torgen_sec_cfg) {
+  for (const auto& json_config : json_torgen_sec_cfg) {
+    auto torgen_config = std::make_shared<TorizonGenericSecondaryConfig>(json_config);
+    configs.push_back(torgen_config);
+  }
+}
+
 }  // namespace Primary
