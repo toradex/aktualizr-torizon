@@ -1,5 +1,9 @@
-# aktualizr-torizon
+**IMPORTANT**
 
+This project is deprecated and will no longer be maintained.
+Please clone https://github.com/toradex/aktualizr instead.
+
+# aktualizr-torizon
 
 This is the Toradex implementation of the Aktualizr client that integrates libaktualizr. The application is intented to be built as a part of a yocto build. The corresponding yocto layer can be found at <https://github.com/toradex/meta-toradex-torizon>.
 This project uses git submodules. You should either clone it with `--recurse-submodules` flag or run `git submodule update --init --recursive` later.
